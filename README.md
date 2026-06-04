@@ -30,7 +30,7 @@
   - 在 `cf` 官网上找到使用域名的 `网络` 选项，将 `gRPC` 开关打开
   - 获取 `argo` 认证，[点击前往教程](https://github.com/Kiritocyz/Argo-Nezha-Service-Container/blob/main/README.md#argo-%E8%AE%A4%E8%AF%81%E7%9A%84%E8%8E%B7%E5%8F%96%E6%96%B9%E5%BC%8F-json-%E6%88%96-token)
 - github账号准备
-  - 获得 `github` 的 `OAuth 2.0` 认证和 `PAT` ,[点击前往教程](https://github.com/Kiritocyz/Argo-Nezha-Service-Container/blob/main/README.md#%E5%87%86%E5%A4%87%E9%9C%80%E8%A6%81%E7%94%A8%E7%9A%84%E5%8F%98%E9%87%8F)，注意 `v0` 和 `v1` 的 `OAuth 2.0` 认证是不同的，[点击前往了解区别](https://github.com/Kiritocyz/Argo-Nezha-Service-Container#%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98%E4%BB%A5%E5%8F%8A%E5%9D%91%E7%82%B9)。
+  - 获得 `github` 的 `OAuth 2.0` 认证和 `PAT` ，[点击前往教程](https://github.com/Kiritocyz/Argo-Nezha-Service-Container/blob/main/README.md#%E5%87%86%E5%A4%87%E9%9C%80%E8%A6%81%E7%94%A8%E7%9A%84%E5%8F%98%E9%87%8F)，注意 `v0` 和 `v1` 的 `OAuth 2.0` 认证是不同的，[点击前往了解区别](https://github.com/Kiritocyz/Argo-Nezha-Service-Container#%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98%E4%BB%A5%E5%8F%8A%E5%9D%91%E7%82%B9)。
 ## docker镜像及其环境变量说明
 
 docker镜像： `mikehand888/argo-nezha:latest` ， 支持 amd64 和 arm64 架构。

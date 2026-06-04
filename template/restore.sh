@@ -112,13 +112,17 @@ elif [[ "$1" =~ tar\.gz$ ]]; then
   [[ "$FILE" =~ http.*/.*tar.gz ]] && FILE=$(awk -F '/' '{print $NF}' <<< $FILE) || FILE="$1"
 elif [ -z "$1" ]; then
   BACKUP_FILE_LIST=($(wget -qO- --header="Authorization: token $GH_PAT" https://api.github.com/repos/$GH_BACKUP_USER/$GH_REPO/contents/ | awk -F '"' '/"path".*tar.gz/{print $4}' | sort -r))
-  until [[ "$CHOOSE" =~ ^[1-${#BACKUP_FILE_LIST[@]}]$ ]]; do
-    for i in ${!BACKUP_FILE_LIST[@]}; do echo " $[i+1]. ${BACKUP_FILE_LIST[i]} "; done
+  until [[ "$CHOOSE" =~ ^[0-9]+$ ]] && (( CHOOSE >= 1 && CHOOSE <= ${#BACKUP_FILE_LIST[@]} )); do
+    for i in ${!BACKUP_FILE_LIST[@]}; do echo " $((i+1)). ${BACKUP_FILE_LIST[i]} "; done
     echo ""
     [ -z "$FILE" ] && read -rp " Please choose the backup file [1-${#BACKUP_FILE_LIST[@]}]: " CHOOSE
-    [[ ! "$CHOOSE" =~ ^[1-${#BACKUP_FILE_LIST[@]}]$ ]] && echo -e "\n Error input!" && sleep 1
+    # 验证：如果不是纯数字，或者数字不在 1 到数组长度范围内，则报错
+    if [[ ! "$CHOOSE" =~ ^[0-9]+$ ]] || (( CHOOSE < 1 || CHOOSE > ${#BACKUP_FILE_LIST[@]} )); then
+        echo -e "\n Error input! Please enter a number between 1 and ${#BACKUP_FILE_LIST[@]}."
+        sleep 1
+    fi
     ((j++)) && [ $j -ge 5 ] && error "\n The choose has failed more than 5 times and the script exits. \n"
-  done
+done
   FILE=${BACKUP_FILE_LIST[$((CHOOSE-1))]}
 fi
 

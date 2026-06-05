@@ -101,6 +101,8 @@ E[43]="Please enter the required backup time (default is Cron expression: 0 4 \*
 C[43]="请输入需要的备份时间(默认为Cron表达式: 0 4 \* \* \* ，忽略反斜杠):"
 E[44]="Please enter the number of backups to be retained in the backup repository (default is 5):"
 C[44]="请输入备份仓库里所保留的备份数量(默认为 5):"
+E[45]="Please enter caddy's version (skip the default is 2.9.1):"
+C[45]="请输入caddy的版本(跳过默认为2.9.1):"
 
 # 自定义字体彩色，read 函数
 warning() { echo -e "\033[31m\033[01m$*\033[0m"; }  # 红色
@@ -319,7 +321,15 @@ dashboard_variables() {
     3 ) REVERSE_PROXY_MODE=grpcwebproxy ;;
     * ) REVERSE_PROXY_MODE=caddy ;;
   esac
-
+  [ "$REVERSE_PROXY_MODE" -eq "caddy"] && reading "\n (7.5/14) $(text 45) " CADDY_VERSION
+  if [ -z "$CADDY_VERSION" ]; then
+    CADDY_VERSION=2.9.1
+  elif [[ "$CADDY_VERSION" =~ [0-9]{1}\.[0-9]{1,2}\.[0-9]{1,2}$ ]]; then
+    CADDY_VERSION=$(sed 's/[A-Za-z]//' <<< "$CADDY_VERSION")
+  else
+    error "\n $(text 42) \n"
+  fi
+  
   if [[ "$DASHBOARD_VERSION" =~ 0\.[0-9]{1,2}\.[0-9]{1,2}$ ]]; then
     [[ -z "$GH_USER" || -z "$GH_CLIENTID" || -z "$GH_CLIENTSECRET" || -z "$ARGO_AUTH" || -z "$ARGO_DOMAIN" ]] && error "\n $(text 18) "
   else
@@ -355,11 +365,8 @@ install() {
 
   # 根据 caddy，grpcwebproxy 或 nginx 作处理
   if  [ "$REVERSE_PROXY_MODE" = 'caddy' ]; then
-    if [[ "$DASHBOARD_VERSION" =~ 0\.[0-9]{1,2}\.[0-9]{1,2}$ ]]; then
-      local CADDY_LATEST=2.9.1
-    else
-      local CADDY_LATEST=$(wget -qO- "${GH_PROXY}https://api.github.com/repos/caddyserver/caddy/releases/latest" | awk -F [v\"] '/"tag_name"/{print $5}' || echo '2.9.1')
-    fi
+    # local CADDY_LATEST=$(wget -qO- "${GH_PROXY}https://api.github.com/repos/caddyserver/caddy/releases/latest" | awk -F [v\"] '/"tag_name"/{print $5}' || echo '2.9.1')
+    local CADDY_LATEST=CADDY_VERSION
     wget -c ${GH_PROXY}https://github.com/caddyserver/caddy/releases/download/v${CADDY_LATEST}/caddy_${CADDY_LATEST}_linux_${ARCH}.tar.gz -qO- | tar xz -C $TEMP_DIR caddy >/dev/null 2>&1
     GRPC_PROXY_RUN="$WORK_DIR/caddy run --config $WORK_DIR/Caddyfile --watch"
     cat > $TEMP_DIR/Caddyfile  << EOF

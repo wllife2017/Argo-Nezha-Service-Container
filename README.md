@@ -9,6 +9,10 @@
 <details>
   <summary>更新日志</summary>
 
+- 2026.6.5
+  - v0面板使用固定版本的Caddy。
+  - 优化docker的Caddy配置文件。
+  - v1面板开启tsdb功能以稳定数据库大小。
 - 2025.11.4
   - 修复v1面板的固定版本问题。
   - 测试vps脚本并完成。

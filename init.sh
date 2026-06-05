@@ -246,6 +246,8 @@ site_name: "Nezha Probe"
 install_host: $ARGO_DOMAIN:$GRPC_PROXY_PORT
 location: Asia/Shanghai
 tls: true
+tsdb:
+  data_path: "data/tsdb"
 EOF
     if [[ -n "$GH_CLIENTID" && -n "$GH_CLIENTSECRET" ]]; then
       cat >> ${WORK_DIR}/data/config.yaml << EOF

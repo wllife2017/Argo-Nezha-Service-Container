@@ -504,6 +504,8 @@ site_name: "Nezha Probe"
 install_host: $ARGO_DOMAIN:443
 location: Asia/Shanghai
 tls: true
+tsdb:
+  data_path: "data/tsdb"
 EOF
     if [[ -n "$GH_CLIENTID" && -n "$GH_CLIENTSECRET" ]]; then
       cat >> ${WORK_DIR}/data/config.yaml << EOF
